@@ -11,6 +11,7 @@ export function configurePassport(): void {
           clientID: process.env.GOOGLE_CLIENT_ID,
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
           callbackURL: process.env.GOOGLE_CALLBACK_URL || '/api/auth/google/callback',
+          proxy: true,
         },
         async (_accessToken, _refreshToken, profile, done) => {
           try {
@@ -59,6 +60,7 @@ export function configurePassport(): void {
           clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
           callbackURL: process.env.SPOTIFY_CALLBACK_URL || '/api/auth/spotify/callback',
           scope: ['user-read-email', 'user-read-playback-state', 'user-modify-playback-state', 'streaming'],
+          proxy: true,
         },
         async (
           accessToken: string,
