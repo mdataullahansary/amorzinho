@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "buildCommand": "pnpm --filter @amorzinho/web run build",
+  "outputDirectory": "apps/web/.next",
+  "installCommand": "pnpm install",
+  "framework": "nextjs",
+  "env": {
+    "NEXT_PUBLIC_API_URL": "@amorzinho_api_url",
+    "NEXT_PUBLIC_SOCKET_URL": "@amorzinho_socket_url",
+    "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME": "@cloudinary_cloud_name"
+  }
+}
