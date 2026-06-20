@@ -20,7 +20,7 @@ router.post('/create', async (req: AuthRequest, res: Response) => {
     anniversaryDate: anniversaryDate ? new Date(anniversaryDate) : undefined,
   });
 
-  user.coupleId = couple._id as typeof user.coupleId;
+  user.coupleId = couple._id as any;
   await user.save();
 
   res.status(201).json({ couple });
@@ -41,10 +41,10 @@ router.post('/join', async (req: AuthRequest, res: Response) => {
     throw createError('You cannot join your own couple space', 400);
   }
 
-  couple.user2 = user._id as typeof couple.user2;
+  couple.user2 = user._id as any;
   await couple.save();
 
-  user.coupleId = couple._id as typeof user.coupleId;
+  user.coupleId = couple._id as any;
   await user.save();
 
   const populated = await Couple.findById(couple._id)

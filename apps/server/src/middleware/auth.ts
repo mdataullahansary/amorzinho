@@ -2,9 +2,17 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { User, IUserDocument } from '../models/User';
 
-export interface AuthRequest extends Request {
-  user?: IUserDocument;
+declare global {
+  namespace Express {
+    // Merge passport's User interface with ours
+    interface User extends IUserDocument {}
+    interface Request {
+      user?: User;
+    }
+  }
 }
+
+export type AuthRequest = Request;
 
 export async function protect(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
   const authHeader = req.headers.authorization;
