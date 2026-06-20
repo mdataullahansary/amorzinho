@@ -93,6 +93,17 @@ router.patch('/mood', async (req: AuthRequest, res: Response) => {
   res.json({ currentMood: couple.currentMood });
 });
 
+// PATCH /api/couple/note — Update daily note
+router.patch('/note', async (req: AuthRequest, res: Response) => {
+  const user = req.user!;
+  if (!user.coupleId) throw createError('Not in a couple space', 404);
+
+  const { note } = req.body;
+  await Couple.findByIdAndUpdate(user.coupleId, { dailyNote: note });
+
+  res.json({ message: 'Daily note updated' });
+});
+
 // PATCH /api/couple/anniversary — Set anniversary date
 router.patch('/anniversary', async (req: AuthRequest, res: Response) => {
   const user = req.user!;

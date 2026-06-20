@@ -48,6 +48,7 @@ export const coupleApi = {
   join: (inviteCode: string) => api.post('/couple/join', { inviteCode }),
   me: () => api.get('/couple/me'),
   setMood: (mood: string) => api.patch('/couple/mood', { mood }),
+  setNote: (note: string) => api.patch('/couple/note', { note }),
   setAnniversary: (date: string) => api.patch('/couple/anniversary', { anniversaryDate: date }),
   getInviteCode: () => api.get('/couple/invite'),
 };

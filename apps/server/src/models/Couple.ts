@@ -11,6 +11,7 @@ export interface ICoupleDocument extends Document {
     user1?: Mood;
     user2?: Mood;
   };
+  dailyNote?: string;
   createdAt: Date;
 }
 
@@ -28,6 +29,7 @@ const CoupleSchema = new Schema<ICoupleDocument>(
       user1: { type: String },
       user2: { type: String },
     },
+    dailyNote: { type: String, default: '' },
   },
   { timestamps: true }
 );

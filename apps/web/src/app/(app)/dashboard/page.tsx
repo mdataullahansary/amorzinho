@@ -6,7 +6,7 @@ import { Heart, Music, MessageCircle, Calendar, BookOpen, Smile } from 'lucide-r
 import { useAuthStore } from '@/store/authStore';
 import { useChatStore } from '@/store/chatStore';
 import { useMusicStore } from '@/store/musicStore';
-import { analyticsApi } from '@/lib/api';
+import { analyticsApi, coupleApi } from '@/lib/api';
 import {
   cn, daysTogether, daysUntilAnniversary, formatRelative,
   MOOD_EMOJIS, MOOD_COLORS,
@@ -104,21 +104,47 @@ function MoodSelector() {
 
 // ─── Daily Note Quick Widget ──────────────────────────────────────────────────
 function DailyNoteWidget() {
-  const [note, setNote] = useState('');
+  const { couple } = useAuthStore();
+  const [note, setNote] = useState(couple?.dailyNote || '');
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Sync state if couple updates from socket or another tab
+  useEffect(() => {
+    if (couple?.dailyNote !== undefined && couple.dailyNote !== note) {
+      setNote(couple.dailyNote);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [couple?.dailyNote]);
+
+  const handleSave = async () => {
+    if (note === couple?.dailyNote) return;
+    setIsSaving(true);
+    try {
+      await coupleApi.setNote(note);
+      useAuthStore.getState().setCouple({ ...couple!, dailyNote: note });
+    } catch (err) {
+      console.error('Failed to save note', err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-      className="glass rounded-2xl p-5 col-span-1 md:col-span-2">
+      className="glass rounded-2xl p-5 col-span-1 md:col-span-2 relative">
       <div className="flex items-center gap-2 mb-3">
         <BookOpen className="w-4 h-4" style={{ color: 'hsl(var(--accent-2))' }} />
         <h3 className="text-sm font-medium text-foreground">Today&apos;s note</h3>
+        {isSaving && <span className="text-xs text-muted-fg ml-auto animate-pulse">Saving...</span>}
       </div>
       <textarea
         id="daily-note-input"
         value={note}
         onChange={(e) => setNote(e.target.value)}
+        onBlur={handleSave}
         placeholder="What's on your heart today?"
         rows={3}
-        className="input-base resize-none text-sm"
+        className="input-base resize-none text-sm bg-transparent"
       />
     </motion.div>
   );

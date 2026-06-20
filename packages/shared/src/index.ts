@@ -49,6 +49,7 @@ export interface ICouple {
   inviteCode: string;
   anniversaryDate?: Date | string;
   currentMood: CurrentMood;
+  dailyNote?: string;
   createdAt: Date | string;
 }
 

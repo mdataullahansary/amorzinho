@@ -23,7 +23,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { applyState: applyMusicState } = useMusicStore();
   const { applyState: applyMovieState } = useMovieStore();
 
+  const [isMounted, setIsMounted] = useState(false);
+  
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return; // Wait for Zustand persist to hydrate
+
     if (!isAuthenticated || !token) {
       router.push('/login');
       return;
@@ -68,7 +76,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       socket.off('presence:offline');
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, token]);
+  }, [isAuthenticated, token, isMounted]);
 
   if (!isReady) {
     return (
