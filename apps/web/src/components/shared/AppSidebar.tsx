@@ -48,7 +48,7 @@ export default function AppSidebar() {
     <motion.aside
       animate={{ width: collapsed ? 72 : 240 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="flex flex-col h-screen glass border-r border-border shrink-0 overflow-hidden relative z-20"
+      className="hidden md:flex flex-col h-screen glass border-r border-border shrink-0 overflow-hidden relative z-20"
     >
       {/* Header */}
       <div className={cn('flex items-center gap-3 px-4 py-5 border-b border-border', collapsed && 'justify-center px-3')}>

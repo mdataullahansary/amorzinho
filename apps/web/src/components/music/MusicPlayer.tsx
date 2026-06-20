@@ -57,7 +57,7 @@ export default function MusicPlayer() {
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 100, opacity: 0 }}
-        className="fixed bottom-0 left-0 right-0 z-50 glass border-t border-border"
+        className="fixed bottom-16 md:bottom-0 left-0 right-0 z-50 glass border-t border-border"
       >
         {/* Hidden audio element */}
         <audio
@@ -86,38 +86,38 @@ export default function MusicPlayer() {
           </div>
         </div>
 
-        <div className="flex items-center px-4 py-3 gap-4">
+        <div className="flex items-center px-3 md:px-4 py-2 md:py-3 gap-2 md:gap-4">
           {/* Track info */}
-          <div className="flex items-center gap-3 w-64 shrink-0">
+          <div className="flex items-center gap-2 md:gap-3 flex-1 md:flex-none md:w-64 min-w-0">
             {currentTrack.albumArtUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={currentTrack.albumArtUrl} alt={currentTrack.title}
-                className="w-10 h-10 rounded-lg object-cover" />
+                className="w-10 h-10 rounded-lg object-cover shrink-0" />
             ) : (
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center"
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
                 style={{ background: 'hsl(var(--accent) / 0.15)' }}>
                 <Music className="w-4 h-4" style={{ color: 'hsl(var(--accent))' }} />
               </div>
             )}
-            <div className="min-w-0">
+            <div className="min-w-0 pr-2">
               <p className="text-sm font-medium text-foreground truncate">{currentTrack.title}</p>
               <p className="text-xs text-muted-fg truncate">{currentTrack.artist || 'Unknown'}</p>
             </div>
             <button id="player-favorite"
-              className="ml-auto text-muted-fg hover:text-accent transition-colors">
+              className="ml-auto text-muted-fg hover:text-accent transition-colors hidden md:block">
               <Heart className="w-4 h-4" style={currentTrack.isFavorite ? { color: 'hsl(var(--accent))', fill: 'hsl(var(--accent))' } : {}} />
             </button>
           </div>
 
           {/* Controls */}
-          <div className="flex-1 flex items-center justify-center gap-4">
-            <button id="player-skip-back" className="text-muted-fg hover:text-foreground transition-colors">
+          <div className="shrink-0 md:flex-1 flex items-center justify-end md:justify-center gap-2 md:gap-4">
+            <button id="player-skip-back" className="text-muted-fg hover:text-foreground transition-colors hidden md:block">
               <SkipBack className="w-4 h-4" />
             </button>
             <button
               id="player-play-pause"
               onClick={() => isPlaying ? pause() : play()}
-              className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105"
+              className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 shrink-0"
               style={{ background: 'linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-2)))' }}
             >
               {isPlaying
@@ -129,8 +129,8 @@ export default function MusicPlayer() {
             </button>
           </div>
 
-          {/* Time + Volume */}
-          <div className="flex items-center gap-3 w-64 justify-end">
+          {/* Time + Volume (Desktop only) */}
+          <div className="hidden md:flex items-center gap-3 w-64 justify-end">
             <span className="text-xs text-muted-fg tabular-nums">
               {formatDuration(position)} / {formatDuration(duration)}
             </span>

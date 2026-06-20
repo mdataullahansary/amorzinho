@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import AppSidebar from '@/components/shared/AppSidebar';
+import MobileHeader from '@/components/shared/MobileHeader';
+import MobileBottomNav from '@/components/shared/MobileBottomNav';
 import MusicPlayer from '@/components/music/MusicPlayer';
 import { Loader2 } from 'lucide-react';
 import { connectSocket, getSocket } from '@/lib/socket';
@@ -77,13 +79,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex flex-col md:flex-row h-[100dvh] overflow-hidden bg-background">
       <AppSidebar />
-      <main className="flex-1 overflow-y-auto flex flex-col min-w-0">
-        {children}
-        <div className="h-24" /> {/* spacer for persistent music player */}
+      <MobileHeader />
+      <main className="flex-1 overflow-hidden flex flex-col min-w-0 relative bg-background">
+        <div className="w-full h-[calc(100%-8rem)] md:h-[calc(100%-6rem)] overflow-y-auto overflow-x-hidden flex flex-col relative">
+          {children}
+        </div>
       </main>
       <MusicPlayer />
+      <MobileBottomNav />
     </div>
   );
 }
