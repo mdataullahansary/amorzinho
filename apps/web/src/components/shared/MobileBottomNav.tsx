@@ -11,7 +11,6 @@ import {
 import { useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const BOTTOM_NAV = [
   { href: '/dashboard', icon: Heart, label: 'Home' },
@@ -66,40 +65,63 @@ export default function MobileBottomNav() {
         );
       })}
 
-      {/* More Menu (Sheet) */}
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetTrigger asChild>
-          <button className="flex flex-col items-center justify-center w-16 h-full gap-1 text-muted-fg hover:text-foreground transition-colors">
-            <Menu className="w-5 h-5" />
-            <span className="text-[10px] font-medium">More</span>
-          </button>
-        </SheetTrigger>
-        <SheetContent side="bottom" className="rounded-t-3xl border-t border-border glass bg-background/80 p-6 h-[70vh]">
-          <div className="space-y-4">
-            <h3 className="font-serif text-2xl text-foreground">More</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {MORE_NAV.map(({ href, icon: Icon, label }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={() => setSheetOpen(false)}
-                  className="flex flex-col items-center justify-center p-4 rounded-2xl glass border border-border/50 text-foreground hover:bg-surface-2 transition-all gap-3"
-                >
-                  <Icon className="w-6 h-6 text-accent" />
-                  <span className="text-sm font-medium">{label}</span>
-                </Link>
-              ))}
-            </div>
-            <button
-              onClick={handleLogout}
-              className="w-full flex items-center justify-center p-4 rounded-2xl border border-red-500/20 text-red-400 bg-red-500/5 hover:bg-red-500/10 transition-all gap-2 mt-6"
+      {/* More Menu Toggle */}
+      <button
+        onClick={() => setSheetOpen(true)}
+        className="flex flex-col items-center justify-center w-16 h-full gap-1 text-muted-fg hover:text-foreground transition-colors"
+      >
+        <Menu className="w-5 h-5" />
+        <span className="text-[10px] font-medium">More</span>
+      </button>
+
+      {/* Custom Bottom Sheet */}
+      <AnimatePresence>
+        {sheetOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSheetOpen(false)}
+              className="fixed inset-0 bg-black/50 z-50 backdrop-blur-sm"
+            />
+            {/* Sheet Content */}
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed bottom-0 left-0 right-0 z-50 rounded-t-3xl border-t border-border glass bg-background/95 p-6 pb-12 max-h-[80vh] overflow-y-auto shadow-2xl"
             >
-              <LogOut className="w-5 h-5" />
-              <span className="font-medium">Sign Out</span>
-            </button>
-          </div>
-        </SheetContent>
-      </Sheet>
+              <div className="w-12 h-1.5 bg-muted rounded-full mx-auto mb-6 opacity-50" />
+              <div className="space-y-4">
+                <h3 className="font-serif text-2xl text-foreground">More</h3>
+                <div className="grid grid-cols-2 gap-3">
+                  {MORE_NAV.map(({ href, icon: Icon, label }) => (
+                    <Link
+                      key={href}
+                      href={href}
+                      onClick={() => setSheetOpen(false)}
+                      className="flex flex-col items-center justify-center p-4 rounded-2xl glass border border-border/50 text-foreground hover:bg-surface-2 transition-all gap-3"
+                    >
+                      <Icon className="w-6 h-6 text-accent" />
+                      <span className="text-sm font-medium">{label}</span>
+                    </Link>
+                  ))}
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center p-4 rounded-2xl border border-red-500/20 text-red-400 bg-red-500/5 hover:bg-red-500/10 transition-all gap-2 mt-6"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span className="font-medium">Sign Out</span>
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
